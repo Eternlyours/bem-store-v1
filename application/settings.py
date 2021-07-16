@@ -13,7 +13,6 @@ https://docs.djangoproject.com/en/3.1/ref/settings/
 import os
 from pathlib import Path
 
-import django_heroku
 import stripe
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -70,7 +69,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # 'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -171,16 +169,8 @@ MPTT_ADMIN_LEVEL_INDENT = 20
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
-import dj_database_url
-
-db_env = dj_database_url.config(default='sqlite:///db/db.sqlite3')
-
-DATABASES['default'].update(db_env)
 
 CKEDITOR_UPLOAD_PATH = 'uploads/ckeditor/'
-
-WHITENOISE_MANIFEST_STRICT = False
-WHITENOISE_USE_FINDERS = True
 
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
@@ -191,8 +181,6 @@ STATICFILES_DIRS = [
 
 MEDIA_ROOT = os.path.join(BASE_DIR, '/media/')
 MEDIA_URL = '/media/'
-
-WHITENOISE_AUTOREFRESH = True
 
 # CKEDITOR
 
@@ -299,10 +287,6 @@ EMAIL_HOST_PASSWORD = os.environ.get('DJANGO_EMAIL_HOST_PASSWORD')
 DEFAULT_FROM_EMAIL = os.environ.get('DJANGO_DEFAULT_FROM_EMAIL')
 EMAIL_USE_SSL = os.environ.get('DJANGO_EMAIL_USE_SSL')
 
-STATICFILES_STORAGE = 'whitenoise.storage.CompressedManifestStaticFilesStorage'
-# STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.ManifestStaticFilesStorage'
-
-django_heroku.settings(locals())
 
 LOGGING = {
     'version': 1,
