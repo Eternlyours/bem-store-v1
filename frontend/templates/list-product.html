@@ -1,0 +1,116 @@
+<div class="row w-100">
+    <h1>Каталог</h1>
+</div>
+{% for i in object_list %}
+{% load static %}
+<div class="col-lg-4 col-md-6 mb-4 wow animated animate__fadeInUp" data-wow-duration="1s" data-wow-delay="0"
+    data-wow-offset="5" data-wow-iteration="1">
+    <div class="card h-100">
+        <div class="position-relative">
+            <form action="{% url 'product-add-favorite' i.slug %}" method="POST" class="position-absolute link-like-product">
+                {% csrf_token %}
+                <button type="submit" class="btn btn-link">
+                    <i class="fa fa-heart like-product"></i>
+                </button>
+            </form>
+            <div class="single-item">
+                {% for img in i.images.all %}
+                <div>
+                    <img class=""
+                        style="height: 150px; width: 100%; object-fit: contain; cursor: pointer; user-select: none;"
+                        src="{{ img.image.url }}" alt="">
+                </div>
+                {% empty %}
+                
+                <img src="{% static 'style\img\images\placeholder.png' %}" alt="" style="height: 130px; object-fit: contain;">
+                {% endfor %}
+            </div>
+        </div>
+        <div class="card-body">
+            {% if i.quantity <= 0 %}
+                <i class="fa fa-times" style="color: red;"></i>
+                <u>Нет в наличии</u>
+            {% else %}
+                <i class="fa fa-check" style="color: green;"></i>
+                <u>В наличии</u>
+            {% endif %}
+            <br>
+            <small class="m-0">Покупка: {{ i.get_type_buy_display|lower }}</small>
+            <small>
+                Категория:
+                {{ i.category.name }}
+            </small>
+            <h4 class="card-title">
+                <a href="{% url 'detail-product' i.slug %}">{{ i.brand.name }} {{ i.model|truncatewords:"4" }}</a>
+            </h4>
+            {% if i.discount_sum %}
+                <h5>
+                    <del>
+                        {{ i.price_doc|floatformat:-2 }}&nbsp;&#8381;
+                    </del>
+                    <span style="color: red;" class="ml-1">
+                        {{ i.price_discount|floatformat:-2 }}&nbsp;&#8381;
+                    </span>
+                </h5>
+            {% else %}
+                <h5>{{ i.price_discount|floatformat:-2 }}&nbsp;&#8381;</h5>
+            {% endif %}
+            
+            <div class="card-desc">
+                <ul class="list-unstyled pl-2">
+                    {% for c in i.characteristic.all %}
+                        {% if forloop.counter <= 2 %}
+                            <li>
+                                {{ c.name }}: 
+                                {{ c.text_value|default:"" }} 
+                                {{ c.decimal_value|default:""|floatformat:1 }} 
+                                {{ c.get_unit_display|default:"" }}
+                            </li>
+                        {% elif forloop.counter == 3 %}
+                            <li>...</li>
+                        {% else %}
+
+                        {% endif %}
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+        <div class="card-footer">
+            <a href="{% url 'detail-product' i.slug %}" class="btn btn-info">
+                Подробнее...
+            </a>
+        </div>
+        <div class="card-footer">
+            <small class="text-muted" style="font-size: 18px;">
+                {% if i.avg >= 1 %}
+                    ★
+                {% else %}
+                    ☆
+                {% endif %}
+                {% if i.avg >= 2 %}
+                    ★
+                {% else %}
+                    ☆
+                {% endif %}
+                {% if i.avg >= 3 %}
+                    ★
+                {% else %}
+                    ☆
+                {% endif %}
+                {% if i.avg >= 4 %}
+                    ★
+                {% else %}
+                    ☆
+                {% endif %}
+                {% if i.avg == 5 %}
+                    ★
+                {% else %}
+                    ☆
+                {% endif %}
+            </small>
+        </div>
+    </div>
+</div>
+{% empty %}
+    <h2>Пусто!</h2>
+{% endfor %}

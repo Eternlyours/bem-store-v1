@@ -1,0 +1,234 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock  %}
+
+{% block header %}
+
+{% include 'header.html' %}
+
+{% endblock %}
+
+{% block override_container %} other-page {% endblock %}
+
+{% block content-base %}
+
+<div class="col-lg-8">
+
+    <!-- Card -->
+    <div class="mb-3">
+        <div class="pt-4 wish-list">
+
+
+            {% for message in messages %}
+            <div class="alert alert-success d-flex justify-content-between align-items-center message-custom-elem"
+                style="transition: all 0.4s ease-in-out;" role="dialog">
+                {{ message }}
+                <span type="button" class="close" data-dismiss="alert" aria-label="Close">
+                    <span aria-hidden="true">&times;</span></span>
+            </div>
+            {% endfor %}
+
+            <h5 class="mb-4">В корзине 
+                <span id="cart-count-condition">
+                    {% load tags %}
+                    {{ cart_info.quantity|default:0|declination:choice_list }}
+                </span>
+                </h5>
+            {% for item in items %}
+            <div class="row mb-4 position-relative">
+                {% if item.total_quantity <= 0 %} 
+                    <div class="w-100 text-center">
+                        <strong>Данный товар к сожалению закончился на складе</strong>
+                        <hr>
+                    </div>
+                {% endif %}
+            <div class="row w-100">
+                <div class="col-md-5 col-lg-3 col-xl-3">
+                    <div class="view zoom overlay z-depth-1 rounded mb-3 mb-md-0">
+                        <a href="{% url 'detail-product' item.product.slug %}">
+                            {% for img in item.product.images.all %}
+                            {% if forloop.counter == 1 %}
+                            <img class="img-fluid w-100 image-cart-item" src="{{ img.image.url }}" alt="">
+                            {% endif %}
+                            {% endfor %}
+                        </a>
+                    </div>
+                </div>
+                <div class="col-md-7 col-lg-9 col-xl-9">
+                    <div>
+                        <div class="d-flex justify-content-between">
+                            <div>
+                                <h5>{{ item.product.brand.name|upper }} {{ item.product.model|upper }}</h5>
+                                <p class="mb-2 text-muted text-uppercase small">
+                                    Категория: {{ item.product.category.name }}
+                                </p>
+                                <p class="mb-2 text-muted text-uppercase small">
+                                    Производитель: {{ item.product.brand.name }}
+                                </p>
+                            </div>
+                            <div class="d-flex flex-column align-items-center justify-content-between">
+                                <div class="def-number-input number-input safari_only mb-0 w-100 d-flex">
+                                    <button id="shadows-example-decrease" style="order: 1;"
+                                        onclick="this.parentNode.querySelector('input[type=number]').stepDown();"
+                                        class="minus decrease cart-control-quantity cart-control-quantity-minus">
+                                        &minus;
+                                    </button>
+                                    <button id="shadows-example-add" style="order: 3;"
+                                        onclick="this.parentNode.querySelector('input[type=number]').stepUp();"
+                                        style="height: 2rem;"
+                                        class="plus increase cart-control-quantity cart-control-quantity-plus">
+                                        &plus;
+                                    </button>
+                                    <!-- <div class="d-flex flex-column cart-input-field" style="order: 2;"> -->
+                                    <form action="{% url 'cart' %}" method="POST"
+                                        class="d-flex flex-column cart-input-field" style="order: 2;">
+                                        {% csrf_token %}
+                                        <input class="quantity" id="cart-field" min="1" step="1" name="quantity"
+                                            value="{% if item.product.get_actual_quantity.total_quantity <= 0 %}0{% else %}{{ item.quantity }}{% endif %}" type="number"
+                                            required max="{{ item.product.get_actual_quantity.total_quantity }}">
+                                        <input type="hidden" name="product" value="{{ item.product.slug }}">
+                                        <button class="position-absolute btn btn-secondary retweet-button-show"
+                                            type="submit"
+                                            style="width: 3rem; height: 2rem; transition: all 0.3s ease-in-out;">
+                                            <i class="fa fa-refresh"></i>
+                                        </button>
+                                    </form>
+                                    <!-- </div> -->
+                                </div>
+                                <p class="mb-0">
+                                    <span>
+                                        <strong id="summary" class="d-flex flex-column">
+                                            {% if item.discount > 0 %}
+                                                <del>{{ item.price|floatformat:-2 }}&nbsp;&#8381;</del>
+                                                {{ item.price_discount|floatformat:-2 }}&nbsp;&#8381;
+                                            {% else %}
+                                                {{ item.price|floatformat:-2 }}&nbsp;&#8381;
+                                            {% endif %}
+                                        </strong>
+                                    </span>
+                                </p>
+                            </div>
+                        </div>
+                        <div class="d-flex justify-content-between align-items-center">
+                            <div class="d-flex align-items-center">
+                                <a href="{% url 'delete-cart' item.product.slug %}" type="button"
+                                    class="card-link-secondary small text-uppercase mr-3"><i
+                                        class="fa fa-trash-alt mr-1"></i> Удалить </a>
+                                <form action="{% url 'product-add-favorite' item.product.slug %}" method="POST">
+                                    {% csrf_token %}
+                                    <button type="submit" class="card-link-secondary small text-uppercase btn btn-link" style="font-size: 13px !important;">
+                                        <i class="fa fa-heart mr-1"></i>
+                                        В список понравившихся
+                                    </button>
+                                </form>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <hr>
+        {% empty %}
+        <h2>
+            Корзина пуста
+        </h2>
+        {% endfor %}
+
+
+    </div>
+</div>
+
+</div>
+
+<div class="col-lg-4">
+    <div class="mb-3">
+        <div class="pt-4">
+            {% if cart_info.total_quantity %}
+            <h5 class="mb-3">Итог</h5>
+
+            <ul class="list-group list-group-flush">
+                <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                    Сумма без скидок
+                    <span id="basic-example-price">{{ cart_info.total_amount_no_discount|floatformat:-2 }}&#8381;</span>
+                </li>
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0 border-0">
+                    Вы сэкономите
+                    <span id="econom" class="d-flex flex-row-reverse">
+                        {{ cart_info.economy|floatformat:-2 }}&#8381;
+                    </span>
+                </li>
+                {% if conditions %}
+                    {% if conditions.delivery %} 
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                            Доставка
+                            <span>Только самовывоз</span>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                            Доставка
+                            <span>Доставка и самовывоз</span>
+                        </li>
+                    {% endif %}
+                    {% if conditions.type_buy %} 
+                        <li class="list-group-item d-flex justify-content-between align-items-center border-0 px-0">
+                            Оплата
+                            <span>Предоплата</span>
+                        </li>
+                    {% else %}
+                        <li class="list-group-item d-flex justify-content-between align-items-center px-0">
+                            Оплата
+                            <span>Наличный и онлайн расчёт</span>
+                        </li>
+                    {% endif %}
+                {% endif %}
+                <li class="list-group-item d-flex justify-content-between align-items-center px-0 mb-3">
+                    <strong>К оплате</strong>
+                    <strong><span id="total-amount">{{ cart_info.total_amount_discount|floatformat:-2 }}&#8381;</span></strong>
+                </li>
+            </ul>
+            <a href="{% url 'checkout' %}" class="btn btn-primary btn-block waves-effect waves-light">Перейти к
+                оформлению</a>
+
+            {% endif %}
+        </div>
+    </div>
+   
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+
+<script>
+    // let array = document.getElementsByClassName('retweet-button-show');
+
+    // Array.from(array).forEach(elem => elem.addEventListener(
+    //     'click',
+    //     function () {
+    //         let quantity = this.parentNode.querySelector('input[type=number]').value;
+    //         let product = this.parentNode.querySelector('input[type=number').getAttribute('data-product')
+    //         let data = {
+    //             'product': product,
+    //             'quantity': quantity
+    //         }
+    //         fetch(window.location.href, {
+    //             method: 'POST',
+    //             headers: {
+    //                 'Content-Type': 'application/json;charset=utf-8',
+    //                 'Accept': 'application/json',
+    //                 'X-Requested-With': 'XMLHttpRequest',
+    //                 'X-CSRFToken': '{{ csrf_token }}'
+    //             },
+    //             credentials: 'same-origin',
+    //             body: JSON.stringify(data)
+    //         }).then(
+    //             () => location.reload()
+    //         )
+    //     },
+    //     false
+    // ))
+</script>
+
+{% endblock %}

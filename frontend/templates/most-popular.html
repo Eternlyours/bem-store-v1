@@ -1,0 +1,52 @@
+{% load static %}
+<div class="mt-3 mb-4 pl-5 pr-5 position-relative most-popular-slider-container">
+    <h3 class="mb-3">Популярные товары</h3>
+    <button type="button" class="left-arrow-most-popular slick-arrow-custom position-absolute">
+        <i class="fa fa-chevron-circle-left"></i>
+    </button>
+    <button type="button" class="right-arrow-most-popular slick-arrow-custom">
+        <i class="fa fa-chevron-circle-right"></i>
+    </button>
+    <div class="most-popular-product">
+        {% for i in popular %}
+        <div class=" ml-2 mr-2 popular-item">
+            <div class="card h-100" style="background-color: white;">
+                <div class="card-body d-flex flex-column" style="background-color: white;">
+                    <strong class="card-title m-0">
+                        <a href="{% url 'detail-product' i.slug %}">{{ i.brand.name }} {{ i.model }}</a>
+                    </strong>
+                    <small style="z-index: 2000;">
+                        <a href="{% url 'product-category' i.category.slug %}">{{ i.category.name }}</a>
+                    </small>
+                    <small style="z-index: 2000;">Покупок: {{ i.popular }}</small>
+                </div>
+                {% for img in i.images.all %}
+                    {% if forloop.first %}
+                        <div>
+                            <img class="img-popular-item"
+                                src="{{ img.image.url }}" alt="">
+                        </div>
+                    {% endif %}
+                {% empty %}
+                    <object class="no-photo-placeholder" type="image/svg+xml" style="z-index: 1000;" 
+                        data="{% static 'style\img\static\no-photos.svg' %}">
+                    </object>
+                {% endfor %}
+            
+                <div class="card-footer">
+                    <div class="d-flex align-items-center justify-content-between">
+                        <a href="{% url 'add-to-cart' i.slug %}" class="btn p-2 {% if i.quantity > 0 %} btn-success {% else %} btn-danger {% endif %}" style="font-size: 13px;">В&nbsp;корзину</a>
+                        {% if i.discount_sum %}
+                            <strong style="color: red;" class="ml-1">
+                                {{ i.price_discount|floatformat:-2 }}&nbsp;&#8381;
+                            </strong>
+                        {% else %}
+                            <strong>{{ i.price_discount|floatformat:-2 }}&nbsp;&#8381;</strong>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+        </div>
+        {% endfor %}
+    </div>
+</div>

@@ -1,0 +1,42 @@
+<button type="button" class="bg-transparent border-0 filter-button" id="button_filter">
+    <!-- <i class="fa fa-filter mr-2"></i>
+    Фильтровать -->
+    <i class="fa fa-align-justify mr-"></i>
+    Сортировать
+</button>
+<div class="filter-params p-3 border mt-4 hidden-panel w-100" id="panel_filter">
+    <div class="position-relative">
+        <form action="{{ request.path }}" method="GET" class="form" id="filter-form">
+            <style>
+                .form > ul {
+                    max-height: 250px;
+                    height: 100%;
+                    overflow-y: auto!important;
+                }
+            </style>
+            <input type="hidden" name="q" value="{{ q }}">
+            <strong>Сортировка:</strong>
+            <br>
+            {{ sort_form }}
+            <hr>
+            <strong>Фильтрация:</strong>
+            <br>
+            {% for field in filter_form %}
+                <label for="{{ field.id_for_label }}">
+                    {{ field.label }}
+                </label>
+                {{ field }}                
+            {% endfor %}
+            {% for error in filter_form.errors %}
+                {{ error }}
+            {% endfor %}
+            <hr>
+            <div class="d-flex flex-direction-row mt-4 mb-4">
+                <input type="button" class="btn btn-light" id="button_close_filter" value="Очистить и закрыть" onclick="this.parent.form.reset();">
+                <button type="submit" class="btn btn-success ml-2">
+                    Выбрать
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

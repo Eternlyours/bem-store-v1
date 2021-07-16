@@ -1,0 +1,102 @@
+{% extends "base.html" %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block header %}
+
+{% include 'header.html' %}
+
+{% endblock %}
+
+{% block override_container %} other-page {% endblock %}
+
+{% block sidebar-base %}
+
+{% include 'sidebar.html' %}
+
+{% endblock %}
+
+
+{% block content-base %}
+
+<div class="col-lg-9">
+
+    <div class="w-100 d-flex justify-content-between my-4 align-items-center">
+        <nav aria-label="breadcrumb">
+            <ol class="breadcrumb m-0">
+                {% block breadcrumbs %}
+                <ol class="breadcrumb m-0">
+                    {% load i18n %}
+                    <li class="breadcrumb-item">
+                        <a href="{% url 'home'%}">{% trans 'Home'%}</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="/catalog">Каталог</a>
+                    </li>
+                    {% if breadcrumbs_search %}
+                        {% for item in breadcrumbs_search %}
+                            <li class="breadcrumb-item">
+                                <a href="#" class="dsbl">{{ item }}</a>
+                            </li>
+                        {% endfor %}
+                    {% endif %}
+                    {% if breadcrumb_item %}
+                        {% for parent in breadcrumb_item.get_ancestors %}
+                            <li class="breadcrumb-item">
+                                <a href="{{ parent.get_absolute_url }}">{{ parent.name }}</a>
+                            </li>
+                        {% endfor %}
+                        <li class="breadcrumb-item">
+                            <a href="{{ breadcrumb_item.get_absolute_url }}" class="dsbl">{{ breadcrumb_item.name }}</a>
+                        </li>
+                    {% endif %}
+                </ol>
+            {% endblock %}
+            </ol>
+        </nav>
+        <div class="filter-container">
+            {% include 'filter.html' %}
+        </div>
+    </div>
+
+    <hr>
+    {% if q %}
+    Найдено по запросу <h2>"{{ q|upper }}"</h2>
+    <hr>
+    {% endif %}
+    {% for message in messages %}
+    <div class="alert alert-info d-flex justify-content-between align-items-center message-custom-elem"
+        style="transition: all 0.4s ease-in-out;" role="dialog">
+        {{ message }}
+        <span type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </span>
+    </div>
+    {% endfor %}
+    <div class="row" id="content">
+
+        {% block content %}
+        {% include 'list-product.html' %}
+        {% endblock %}
+
+    </div>
+
+    {% include 'pagination.html' %}
+
+</div>
+
+{% endblock %}
+
+{% block scripts %}
+<script>
+    jQuery(document).ready(function ($) {
+        $(".form").submit(function () {
+            $(this).find(":input").filter(function () { return !this.value; }).attr("disabled", "disabled");
+            return true;
+        });
+        $("form").find(":input").prop("disabled", false);
+    })
+</script>
+{% endblock %}

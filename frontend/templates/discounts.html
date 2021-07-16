@@ -1,0 +1,81 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock  %}
+
+{% block header %}
+
+{% include 'header.html' %}
+
+{% endblock %}
+
+{% block override_container %} other-page {% endblock %}
+
+{% block sidebar-base %}
+
+{% include 'sidebar.html' %}
+
+{% endblock %}
+
+{% block content-base %}
+
+<div class="col-lg-9">
+
+    <div class="w-100 d-flex justify-content-between my-4 align-items-center">
+        <nav aria-label="breadcrumb">
+            {% block breadcrumbs %}
+            <ol class="breadcrumb m-0">
+                {% load i18n %}
+                <li class="breadcrumb-item">
+                    <a href="{% url 'home'%}">{% trans 'Home'%}</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="#" class="dsbl">Акции и скидки</a>
+                </li>
+            </ol>
+            {% endblock %}
+        </nav>
+        <div class="filter-container">
+            
+        </div>
+    </div>
+
+    <hr>
+
+    <div class="row" id="content">
+        <h1 class="mb-4">Дейсвтующие скидки</h1>
+        {% for i in object_list %}
+            <div class="card mb-3 w-100">
+                <div class="card-header">
+                    <h5>
+                        Название "{{ i.name }}"
+                    </h5>
+                </div>
+                <div class="card-body">
+                    <h5 class="card-title">Размер скидки {{ i.amount_discount }}%</h5>
+                    <ul>
+                        Товары на которые распространяется скидка
+                        {% for product in i.products.all %}
+                            <li>
+                                <a href="{% url 'detail-product' product.slug %}">
+                                    {{ product.brand.name }} {{ product.model }} 
+                                </a>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                    <div class="card-footer">
+                        <small>Дата начала действия скидки: {{ i.date_start }}</small><br>
+                        <small>Дата конца действия скидки: {{ i.date_finish }}</small>
+                    </div>
+                </div>
+            </div>
+        {% empty %}
+            <h2>Скидок и акций нет :(</h2>
+        {% endfor %}
+
+    </div>
+
+</div>
+
+{% endblock %}

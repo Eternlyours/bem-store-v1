@@ -1,0 +1,77 @@
+<!-- Footer -->
+<footer class="text-center text-white" style="background-color: black;">
+    <!-- Grid container -->
+    <div class="container p-4">
+        <section class="">
+            <a class="navbar-brand mb-2" href="{% url 'home' %}" style="font-size: 0;">
+                {% load static %}
+                <img src="{% static 'style\img\icons\logo.svg' %}" class="navbar-brand-footer-img" alt="Бензоэлектромастер">
+            </a>
+        </section>
+        <section class="mb-4">
+            <p>
+                Покупка оборудования в компании «Бензоэлектромастер» - это гарантия безопасной эксплуатации и эффективной работы!
+            </p>
+        </section>
+        <section class="">
+            <div class="row">
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0 ml-auto mr-auto">
+                    <h5 class="text-uppercase">Ссылки</h5>
+
+                    <ul class="list-unstyled mb-0">
+                        <li>
+                            <a href="{% url 'home' %}" class="text-white">Главная</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'about-us' %}" class="text-white">О нас</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'catalog' %}" class="text-white">Каталог</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'news-list' %}" class="text-white">Новости</a>
+                        </li>
+                        <li>
+                            <a href="{% url 'service-list' %}" class="text-white">Блог</a>
+                        </li>
+                        {% if user.is_authenticated %}
+                            {% if user.is_superuser %}
+                                <a href="{% url 'admin:index' %}" class="text-white">Панель администратора</a>
+                            {% endif %}
+                        {% endif %}
+                    </ul>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-4 mb-md-0 ml-auto mr-auto">
+                    <h5 class="text-uppercase">Контакты</h5>
+
+                    <ul class="list-unstyled mb-0">
+                        <li class="text-white">
+                            Адрес: г.Челябинск, ул. Цвиллинга, 61.
+                        </li>
+                        <li class="text-white">
+                            Электронная почта: stilservis74@gmail.com 
+                        </li>
+                        <li class="text-white">
+                            Телефон: +7 (950) 734-82-68 
+                        </li>
+                        <li class="text-white">
+                            График работы: каждый день кроме воскресенья С 9:00 до 18:00 
+                        </li>
+                    </ul>
+                </div>
+                <!--Grid column-->
+            </div>
+            <!--Grid row-->
+        </section>
+        <!-- Section: Links -->
+    </div>
+    <!-- Grid container -->
+
+    <!-- Copyright -->
+    <div class="text-center p-3" style="background-color: rgba(0, 0, 0, 0.2);">
+        © 2021
+        <a class="text-white" href="https://www.djangoproject.com/">Django</a>
+    </div>
+    <!-- Copyright -->
+</footer>
+<!-- Footer -->

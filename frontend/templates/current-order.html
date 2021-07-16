@@ -1,0 +1,87 @@
+{% extends 'base.html' %}
+
+{% block header %}
+
+{% include 'header.html' %}
+
+{% endblock %}
+
+{% block sidebar-base %}
+
+{% include 'sidebar.html' %}
+
+{% endblock %}
+
+{% block override_container %} other-page {% endblock %}
+
+{% block content-base %}
+<div class="col-lg-9">
+    <div class="w-100 d-flex justify-content-between my-4 align-items-center">
+        <nav aria-label="breadcrumb">
+            {% block breadcrumbs %}
+            <ol class="breadcrumb m-0">
+                {% load i18n %}
+                <li class="breadcrumb-item">
+                    <a href="{% url 'home'%}">{% trans 'Home'%}</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="" class="dsbl">Текущий заказ</a>
+                </li>
+            </ol>
+            {% endblock %}
+        </nav>
+    </div>
+
+    <hr>
+    {% for message in messages %}
+    <div class="alert alert-success d-flex justify-content-between align-items-center message-custom-elem"
+        style="transition: all 0.4s ease-in-out;" role="dialog">
+        {{ message }}
+        <span type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </span>
+    </div>
+    {% endfor %}
+    <hr>
+    <table class="table">
+        <tbody>
+            <tr>
+                <th scope="row">ID заказа</th>
+                <td style="word-wrap: anywhere;">
+                    {{ order.id }}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Дата оформления</th>
+                <td style="word-wrap: anywhere;">
+                    {{ order.date_of_reg }}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Способ оплаты</th>
+                <td style="word-wrap: anywhere;">
+                    {{ order.get_buy_display }}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Способ доставки</th>
+                <td style="word-wrap: anywhere;">
+                    {{ order.get_type_delivery_display }}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Статус заказа</th>
+                <td style="word-wrap: anywhere;">
+                    {{ order.get_status_display }}
+                </td>
+            </tr>
+            <tr>
+                <th scope="row">Сумма</th>
+                <td style="word-wrap: anywhere;">
+                    {{ order.amount }}
+                </td>
+            </tr>
+        </tbody>
+    </table>
+</div>
+{% endblock %}

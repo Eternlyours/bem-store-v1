@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    {% load static %}
+    <link rel="shortcut icon" href="{% static 'style/img/icons/favicon.ico' %}" />
+    <link rel="stylesheet" href="{% static 'style/bootstrap/dist/css/bootstrap.min.css' %}">
+    <link rel="stylesheet" href="{% static 'style/bootstrap/dist/css/bootstrap-theme.min.css' %}">
+    <link rel="stylesheet" href="{% static 'style/css/style.css' %}">
+    <link rel="stylesheet" href="{% static 'style/css/font-awesome.min.css' %}">
+    <link rel="stylesheet" href="{% static 'style/css/animate.min.css' %}">
+    <link rel="stylesheet" href="{% static 'style/css/slick.css' %}" />
+    {% block head %}
+        
+    {% endblock %}
+
+    <title>
+        {% block title %}
+            
+        {% endblock  %}
+    </title>
+</head>
+
+<body>
+    <!-- <div class="alert alert-danger position-absolute w-100 d-flex justify-content-between align-items-center message-custom-elem" style="z-index: 2000; display: inline;" role="dialog">
+         message 
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </button>
+    </div>  -->
+
+    {% block header %}
+
+    {% endblock %}
+
+    {% block carousel %}
+
+    {% endblock %}
+
+    <div class="container page {% block override_container %} {% endblock %}">
+
+        <div class="row w-100">
+
+            {% block sidebar-base %}
+
+            {% endblock %}
+
+            <!-- /.col-lg-3 -->
+
+            {% block content-base %}
+
+
+                {% block contact %}
+                    
+                {% endblock %}
+            {% endblock %}
+            <!-- /.col-lg-9 -->
+            
+        </div>
+        <!-- /.row -->
+    </div>
+    </div>
+
+    <!-- <footer class="py-5 bg-black mt-5">
+        
+    </footer> -->
+    {% include 'footer.html' %}
+
+    <script src="{% static 'scripts/jquery-3.5.1.min.js' %}"></script>
+    <script src="{% static 'scripts/wow.min.js' %}"></script>
+    <script src="{% static 'style/bootstrap/dist/js/bootstrap.min.js' %}"></script>
+    <script src="{% static 'scripts/script.js' %}"></script>
+    <script type="text/javascript" src="{% static 'scripts/slick.min.js' %}"></script>
+    {% block scripts %}
+
+    {% endblock %}
+    {% block ovveride_style %}
+
+    {% endblock %}
+</body>
+
+</html>

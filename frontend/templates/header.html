@@ -1,0 +1,112 @@
+﻿<div class="fixed-top" style="z-index: 4000;">
+    <div class="navbar-info-header navbar pt-1 pb-1 d-flex justify-content-between d-row wow animated animate__fadeInDown" data-wow-delay="0"
+    data-wow-duration="1.4s" data-wow-iteration="1" data-wow-offset="0" style="background-color: rgba(232, 232, 232, 95);">
+        <div class="d-flex flex-column align-items-center">
+            <p class="m-0">г.Челябинск, ул. Цвиллинга, 61.</p>
+            <small>
+                stilservis74@gmail.com 
+            </small>
+        </div>
+        <div class="d-flex flex-column align-items-center">
+            <small class="m-0">
+                Пн 
+                Вт
+                Ср
+                Чт 
+                Пт
+                Сб
+                <del style="color: red;">
+                    Вс
+                </del>
+            </small>
+            <small>
+                {% load i18n %}
+                Сегодня: {% now "l F Y H:i" %}
+            </small>
+        </div>
+        <div class="d-flex flex-column align-items-center">
+            <a href="tel:89507348268" class="m-0 text-dark"> +7 (950) 734-82-68 </a>
+            <small class="m-0">С 9:00 до 18:00</small>
+        </div>
+    </div>
+    <nav class="navbar navbar-main-header navbar-expand-lg bg-black wow animated animate__fadeInDown pt-3 pb-3" data-wow-delay="0"
+        data-wow-duration="1.2s" data-wow-iteration="1" data-wow-offset="0">
+        {% load static %}
+        <a class="navbar-brand m-0 p-0" href="{% url 'home' %}" style="font-size: 0;">
+            <img src="{% static 'style\img\icons\logo.svg' %}" alt="Бензоэлектромастер" style="width: 350px;">
+        </a>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarTogglerDemo02"
+            aria-controls="navbarTogglerDemo02" aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse flex-row-reverse" id="navbarTogglerDemo02">
+            <ul class="navbar-nav ml-auto mt-lg-0">
+                <li class="nav-item active">
+                    <a class="nav-link" href="{% url 'home' %}">
+                        <i class="fa fa-home"></i>
+                        <span class="sr-only">(current)</span></a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'catalog' %}">Каталог</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'about-us' %}">О нас</a>
+                </li>
+                <li class="nav-item">
+                    <a class="nav-link" href="{% url 'discounts' %}">Акции и скидки</a>
+                </li>
+                <li class="nav-item dropdown bg-black">
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        Блог
+                    </a>
+                    <div class="dropdown-menu bg-black" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'news-list' %}">Новости</a>
+
+                        <a class="dropdown-item" href="{% url 'service-list' %}">Блог компании</a>
+
+                    </div>
+                </li>
+                <li class="nav-item dropdown bg-black">
+                    {% if user.is_authenticated %}
+                    <a class="nav-link dropdown-toggle" href="#" id="navbarDropdownMenuLink" role="button"
+                        data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                        {% if user.first_name and user.last_name %}
+                            <span class="user-nickname">
+                                {{user.first_name }} {{user.last_name}}
+                            </span>
+                        {% else %}
+                            <span class="user-nickname">
+                                {{ user.username }}
+                            </span>
+                        {% endif %}
+                        <i class="fa fa-user" aria-hidden="true"></i>
+                    </a>
+                    <div class="dropdown-menu bg-black" aria-labelledby="navbarDropdownMenuLink">
+                        <a class="dropdown-item" href="{% url 'profile' %}">Профиль</a>
+                        {% if user.is_superuser %}
+                        <a class="dropdown-item" href="{% url 'admin:index' %}">Панель администратора</a>
+                        {% endif %}
+                        <a class="dropdown-item" href="{% url 'logout' %}">Выйти</a>
+                    </div>
+                    {% else %}
+                    <a class="nav-link" href="{% url 'login' %}">Войти</a>
+                    {% endif %}
+                </li>
+                <li class="nav-item">
+                    <a href="{% url 'cart' %}" class="nav-link">
+                        <i class="fa fa-shopping-basket" aria-hidden="true"></i>
+                        <span class="badge badge-pill badge-info">
+                            {{ cart_info.quantity|default:"0" }}
+                        </span>
+                        <small>
+                            {{ cart_info.total_amount_discount|default:"0"|floatformat:-2 }}&#8381;
+                        </small>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </nav>
+</div>

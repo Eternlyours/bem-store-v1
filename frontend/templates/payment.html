@@ -1,0 +1,139 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock  %}
+
+{% block head %}
+<script src="https://js.stripe.com/v3/"></script>
+{% endblock %}
+
+{% block header %}
+
+{% include 'header.html' %}
+
+{% endblock %}
+
+{% block override_container %} other-page d-flex align-items-center justify-content-center {% endblock %}
+
+{% block content-base %}
+<style>
+    .StripeElement {
+        width: 350px;
+    }
+</style>
+<div class="row d-flex justify-content-center w-100 h-100 align-items-center">
+    <div class="col-md-4">
+        <h3>Внимание!</h3>
+        <strong>Касса является муляжом</strong><br>
+        <strong>Для оплаты введите следующие данные</strong><br>
+        <hr>
+        <span>
+            4242 4242 4242 4242  04 24 242 24224
+        </span>
+        <hr>
+        <form action="{% url 'payment' order.id %}" method="POST" id="payment-form" style="width: 300px;">
+            <small>ID: {{ order.id }}</small>
+            <p>Покупатель: {{ order.customer.user.first_name }} {{ order.customer.user.last_name }}</p>
+            <h3 class="mb-4">К оплате: {{ cart_info.total_amount_discount|floatformat:-2 }}&#8381;</h3>
+            {% csrf_token %}
+            <label>
+                <div id="card-element"></div>
+            </label>
+        
+            <label for="card-element"></label>
+            <div id="card-element"></div>
+        
+            <button type="submit" class="btn btn-success">Оплатить</button>
+        </form>
+        <div class="mb-3">
+            <div class="pt-4">
+    
+                <h5 class="mb-4">Мы принимаем</h5>
+    
+                <img class="mr-2" width="45px"
+                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/visa.svg"
+                    alt="Visa">
+                <img class="mr-2" width="45px"
+                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/amex.svg"
+                    alt="American Express">
+                <img class="mr-2" width="45px"
+                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce-gateway-stripe/assets/images/mastercard.svg"
+                    alt="Mastercard">
+                <img class="mr-2" width="45px"
+                    src="https://mdbcdn.b-cdn.net/wp-content/plugins/woocommerce/includes/gateways/paypal/assets/images/paypal.png"
+                    alt="PayPal acceptance mark">
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    var stripe = Stripe('pk_test_51IjqzNETVNd9iyiLoMFbU0USWX2l6HGjfFmpZWs7LZB2wI5Uoi7sxXaQmgjpEcLI8VlMMfDru7oyTnv46trHL9Y000Fbb1wxCE');
+    var elements = stripe.elements();
+
+    // Custom styling can be passed to options when creating an Element.
+    // (Note that this demo uses a wider set of styles than the guide below.)
+    var style = {
+        base: {
+            color: '#32325d',
+            fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+            fontSmoothing: 'antialiased',
+            fontSize: '16px',
+            '::placeholder': {
+                color: '#aab7c4'
+            }
+        },
+        invalid: {
+            color: '#fa755a',
+            iconColor: '#fa755a'
+        }
+    };
+
+    // Create an instance of the card Element.
+    var card = elements.create('card', { style: style });
+
+    // Add an instance of the card Element into the `card-element` <div>.
+    card.mount('#card-element');
+
+    // Handle real-time validation errors from the card Element.
+    card.addEventListener('change', function (event) {
+        var displayError = document.getElementById('card-errors');
+        if (event.error) {
+            displayError.textContent = event.error.message;
+        } else {
+            displayError.textContent = '';
+        }
+    });
+
+    // Handle form submission.
+    var form = document.getElementById('payment-form');
+    form.addEventListener('submit', function (event) {
+        event.preventDefault();
+
+        stripe.createToken(card).then(function (result) {
+            if (result.error) {
+                // Inform the user if there was an error.
+                var errorElement = document.getElementById('card-errors');
+                errorElement.textContent = result.error.message;
+            } else {
+                // Send the token to your server.
+                stripeTokenHandler(result.token);
+            }
+        });
+    });
+
+    // Submit the form with the token ID.
+    function stripeTokenHandler(token) {
+        // Insert the token ID into the form so it gets submitted to the server
+        var form = document.getElementById('payment-form');
+        var hiddenInput = document.createElement('input');
+        hiddenInput.setAttribute('type', 'hidden');
+        hiddenInput.setAttribute('name', 'stripeToken');
+        hiddenInput.setAttribute('value', token.id);
+        form.appendChild(hiddenInput);
+
+        // Submit the form
+        form.submit();
+    }
+</script>
+{% endblock %}

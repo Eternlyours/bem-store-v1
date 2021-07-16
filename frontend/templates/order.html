@@ -1,0 +1,273 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock  %}
+
+{% block header %}
+
+{% include 'header.html' %}
+
+{% endblock %}
+
+{% block override_container %} other-page {% endblock %}
+
+{% block content-base %}
+
+<div class="col-lg-7">
+    <h2 class="mt-4">Оформление заказа</h2>
+    {% if messages %}
+    {% for message in messages %}
+    <div class="alert alert-info d-flex justify-content-between align-items-center message-custom-elem"
+        style="transition: all 0.4s ease-in-out;" role="dialog">
+        {{ message }}
+        <span type="button" class="close" data-dismiss="alert" aria-label="Close">
+            <span aria-hidden="true">&times;</span>
+        </span>
+    </div>
+    {% endfor %}
+    {% endif %}
+    <!-- Card -->
+    <div class="mb-3">
+        <form action="{{ request.path }}" method="POST" id="order-form">
+            {% csrf_token %}
+            {% for error in form.non_field_errors %}
+            <div class="alert alert-danger w-100 pt-2 pb-2">
+                Ошибка валидации! <br>
+                {{ error }}
+            </div>
+            {% endfor %}
+            <div class="d-flex order-form-group">
+                <div class="p-1 order-form-group-field">
+                    <label for="{{form.first_name.id_for_label}}">{{form.first_name.label}}</label>
+                    {{ form.first_name }}
+                    <small>
+                        {{ form.username.help_text}}
+                    </small>
+                    {% for error in form.first_name.errors %}
+                    <div class="alert alert-danger w-100 pt-2 pb-2">
+                        {{ error }}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="p-1 order-form-group-field">
+                    <label for="{{form.last_name.id_for_label}}">{{form.last_name.label}}</label>
+                    {{ form.last_name }}
+                    <small>
+                        {{ form.last_name.help_text}}
+                    </small>
+                    {% for error in form.last_name.errors %}
+                    <div class="alert alert-danger w-100 pt-2 pb-2">
+                        {{ error }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div class="d-flex order-form-group">
+                <div class="p-1 order-form-group-field">
+                    <label for="{{form.email.id_for_label}}">{{form.email.label}}</label>
+                    {{ form.email }}
+                    <small>
+                        {{ form.email.help_text}}
+                    </small>
+                    {% for error in form.email.errors %}
+                    <div class="alert alert-danger w-100 pt-2 pb-2">
+                        {{ error }}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="p-1 order-form-group-field">
+                    <label for="{{form.phone.id_for_label}}">{{form.phone.label}}</label>
+                    {{ form.phone }}
+                    <small>
+                        {{ form.phone.help_text}}
+                    </small>
+                    {% for error in form.phone.errors %}
+                    <p>
+                    <div class="alert alert-danger w-100 pt-2 pb-2">
+                        {{ error }}
+                    </div>
+                    </p>
+                    {% endfor %}
+                </div>
+            </div>
+            {% if conditions %}
+            <h5>Условия заказа</h5>
+            <ul>
+                {% if conditions.delivery %}
+                <li>Только самовывоз</li>
+                {% else %}
+                <li>Доставка</li>
+                <li>Самовывоз</li>
+                {% endif %}
+                {% if conditions.type_buy %}
+                <li>Предоплата</li>
+                {% else %}
+                <li>Наличный расчёт</li>
+                <li>Онлайн расчёт</li>
+                {% endif %}
+            </ul>
+            {% endif %}
+            {{ form.type_buy_hidden }}
+            {{ form.type_delivery_hidden }}
+            <script src='https://www.google.com/recaptcha/api.js'></script>
+                <div class="form-group g-recaptcha" data-sitekey="6LezzJkbAAAAAP-0SohR8XxBj-5dHFOY90Ni18gX"></div>
+                {% if messages %}
+                    {% for message in messages %}
+                        {{ message }}
+                    {% endfor %}
+                {% endif %}
+            <div class="d-flex order-form-group">
+                <div class="p-1 order-form-group-field">
+                    <label for="{{form.type_buy.id_for_label}}">{{form.type_buy.label}}</label>
+                    {{ form.type_buy }}
+                    <small>
+                        {{ form.type_buy.help_text}}
+                    </small>
+                    {% for error in form.type_buy.errors %}
+                    <div class="alert alert-danger w-100 pt-2 pb-2">
+                        {{ error }}
+                    </div>
+                    {% endfor %}
+                </div>
+                <div class="p-1 order-form-group-field">
+                    <label for="{{form.type_delivery.id_for_label}}">{{form.type_delivery.label}}</label>
+                    {{ form.type_delivery }}
+                    <small>
+                        {{ form.type_delivery.help_text}}
+                    </small>
+                    {% for error in form.type_delivery.errors %}
+                    <div class="alert alert-danger w-100 pt-2 pb-2">
+                        {{ error }}
+                    </div>
+                    {% endfor %}
+                </div>
+            </div>
+            <div>
+                <label for="{{form.address.id_for_label}}">{{form.address.label}}</label>
+                {{ form.address }}
+                <small>
+                    {{ form.address.help_text}}
+                </small>
+                {% for error in form.address.errors %}
+                <div class="alert alert-danger w-100 pt-2 pb-2">
+                    {{ error }}
+                </div>
+                {% endfor %}
+            </div>
+            <div>
+                <label for="{{form.comment.id_for_label}}">{{form.comment.label}}</label>
+                {{ form.comment }}
+                <small>
+                    {{ form.comment.help_text}}
+                </small>
+                {% for error in form.comment.errors %}
+                <div class="alert alert-danger w-100 pt-2 pb-2">
+                    {{ error }}
+                </div>
+                {% endfor %}
+            </div>
+            {{ form.media }}
+        </form>
+    </div>
+
+</div>
+
+<div class="col-lg-5">
+
+    <!-- Card -->
+    <div class="mb-3">
+        <div class="pt-4">
+
+            <h5 class="mb-3">Товары</h5>
+
+            <table class="table order-table" style="background-color: white; font-size: 14px;">
+                <thead class="thead-primary">
+                    <tr>
+                        <th scope="col">Продукт</th>
+                        <th scope="col">Доставка</th>
+                        <th scope="col">Покупка</th>
+                        <th scope="col">Цена</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for item in items %}
+                    <tr class="{% if item.total_quantity <= 0%} table-danger {% endif %}">
+                        <td scope="row" style="word-wrap: normal">
+                            {{ item.product.brand }} 
+                            {{ item.product.model }}  
+                            (кол-во. {{ item.quantity }}, 
+                            в наличии {{ item.total_quantity }})
+                        </td>
+                        <td>{{ item.product.delivery|yesno:"Да, Нет" }}</td>
+                        <td>{{ item.product.get_type_buy_display }}</td>
+                        <td>
+                            {% if item.discount %}
+                            <del>{{ item.price|floatformat:-2 }}</del>&#8381;
+                            {{ item.price_discount|floatformat:-2 }}&#8381;
+                            {% else %}
+                            {{ item.price|floatformat:-2 }}&#8381;
+                            {% endif %}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+                <tfoot>
+                    <tr>
+                        <td>
+                            <strong>
+                                Итоговая сумма:
+                            </strong>
+                        </td>
+                        <td></td>
+                        <td></td>
+                        <td>
+                            <strong>
+                                {{ cart.total_amount|floatformat:-2 }}&#8381;
+                            </strong>
+                        </td>
+                    </tr>
+                </tfoot>
+            </table>
+
+            <button type="button" class="btn btn-primary mt-3"
+                onclick="document.getElementById('order-form').submit();">
+                Оформить заказ
+            </button>
+            
+        </div>
+    </div>
+
+    <div class="mb-3 d-flex" style="font-size: 12px;">
+
+        <div class="card w-50 m-2">
+            <div class="card-header">
+                <strong>Безопасность</strong>
+            </div>
+            <div class="card-body">
+                Безопасность платежей гарантируется использованием SSL протокола.
+                Данные вашей банковской карты надежно защищены при оплате онлайн.
+            </div>
+        </div>
+        <div class="card w-50 m-2">
+            <div class="card-header">
+                <strong>Доставка</strong>
+            </div>
+            <div class="card-body">
+                Доставка на следующий день по всему Челябинску.
+            </div>
+        </div>
+    </div>
+
+
+</div>
+
+{% endblock %}
+
+{% block ovveride_style %}
+<style>
+    .django-ckeditor-widget {
+        width: 100%;
+    }
+</style>
+{% endblock %}

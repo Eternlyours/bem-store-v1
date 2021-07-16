@@ -1,0 +1,167 @@
+{% extends "admin/change_list.html" %}
+{% block content_title %}
+    <h1> Отчёт по продажам </h1>
+{% endblock %}
+{% block result_list %}
+{% load humanize %}
+{% load tags %}
+<div class="results">
+    <table>
+    <thead>
+      <tr>
+        <th>
+          <div class="text">
+            <a href="#">Категории</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">Различных видов</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">Всего продано</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">Всего продано на сумму</a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="#">
+              <strong>% от общего количества</strong>
+            </a>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+        {% for row in summary %}
+        <tr class="{% cycle 'row1' 'row2' %}">
+          <td> {{ row.product__category__name }} </td>
+          <td> {{ row.total }} </td>
+          <td> {{ row.total_quantity | default:0 }} шт. </td>
+          <td> {{ row.total_amount | default:0 | floatformat:-2}}&#8381; </td>
+          <td>
+            <strong>
+            {{ row.total_quantity | default:0 | as_percentage_of:summary_total.total_quantity }}
+            </strong>
+          </td>
+        </tr>
+        {% endfor %}
+        <tr style="font-weight:bold; border-top:2px solid #DDDDDD;">
+            <td> Итог </td>
+            <td> {{ summary_total.total | intcomma }} </td>
+            <td> {{ summary_total.total_quantity | default:0 }} шт. </td>
+            <td> {{ summary_total.total_amount | floatformat }}&#8381; </td>
+            <td> {{ summary_total.total_quantity | default:0 | as_percentage_of:summary_total.total_quantity }} </td>
+        </tr>
+    </tbody>
+  </table>
+</div>
+<div>
+  <h2>Остатки товаров</h2>
+  <table>
+    <thead>
+      <tr>
+        <th>
+          <div class="text">
+            <a href="">
+              Категории
+            </a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="">
+              Было
+            </a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="">
+              Куплено
+            </a>
+          </div>
+        </th>
+        <th>
+          <div class="text">
+            <a href="">
+              Остаток
+            </a>
+          </div>
+        </th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for row in products_balance %}
+        <tr>
+          <td>{{ row.product__category__name }}</td>
+          <td>{{ row.total_quantity }}</td>
+          <td>{{ row.quantity }}</td>
+          <td>{{ row.balance }}</td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</div>
+<div class="results">
+  <h2> Продажи за всё время </h2>
+  <style>
+  .bar-chart {
+    display: flex;
+    justify-content: space-around;
+    height: 160px;
+    padding-top: 60px;
+    overflow: hidden;
+  }
+  .bar-chart .bar {
+      flex: 100%;
+      align-self: flex-end;
+      margin-right: 2px;
+      position: relative;
+      background-color: #79aec8;
+  }
+  .bar-chart .bar:last-child {
+      margin: 0;
+  }
+  .bar-chart .bar:hover {
+      background-color: #417690;
+  }
+  .bar-chart .bar .bar-tooltip {
+      position: relative;
+      z-index: 999;
+  }
+  .bar-chart .bar .bar-tooltip {
+      position: absolute;
+      top: -60px;
+      left: 50%;
+      transform: translateX(-50%);
+      text-align: center;
+      font-weight: bold;
+      opacity: 0;
+  }
+  .bar-chart .bar:hover .bar-tooltip {
+      opacity: 1;
+  }
+  </style>
+  <div class="results">
+      <div class="bar-chart">
+      {% for x in summary_over_time %}
+          <div class="bar" style="height:{{ x.pct|floatformat:0 }}%">
+              <div class="bar-tooltip">
+                <br>
+                  {{x.total | default:0 | floatformat:-2 }}&#8381;<br>
+                  {{x.period | date:"d/m/Y"}}
+              </div>
+          </div>
+      {% endfor %}
+      </div>
+  </div>
+</div>
+{% endblock %}
+{% block pagination %}{% endblock %}

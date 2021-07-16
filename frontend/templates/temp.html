@@ -1,0 +1,75 @@
+<form action="{{ request.path }}" method="get" id="filter">
+    <select name="brand" id="options">
+        <option value="">---all---</option>
+        <option value="Stihl">Stihl</option>
+        <option value="Viking">Viking</option>
+    </select>
+    <select name="category" id="options">
+        <option value="">---all---</option>
+        <option value="benzopily">Benzopily</option>
+        <option value="elektropily">Elektropily</option>
+    </select>
+</form>
+<button id="click">Get</button>
+<form action="{{ request.path }}" method="get" id="search">
+    <input type="text" name="q">
+    <button type="submit">Search</button>
+</form>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/axios/0.21.1/axios.min.js"></script>
+<script>
+    window.onload = function () {
+        let q = document.getElementById('q').nodeValue
+        let brand = document.getElementById('brand').nodeValue
+        let category = document.getElementById('category').nodeValue
+
+        document.getElementById('click').onclick = function () {
+            axios.get('{{ request.path }}', {
+                params: {
+                    'q': q,
+                    'brand': brand,
+                    'category': category
+                }
+            }).then(function (response) {
+                console.log(response);
+            }).catch(function (error) {
+                console.log(error);
+            })
+        }
+    }
+</script>
+
+{{ filter_form.category.label }}
+        <div class="row">
+            {% for key, value in filter_form.category.field.choices %}
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <li class="list-unstyled">
+                    <label class="checkbox-label-container">
+                        <input type="checkbox" value="{{ key }}" name="problems">
+                        <span>{{ value }}</span>
+                    </label>
+                </li>
+            </div>
+            {% endfor %}
+        </div>
+        {% for field in filter_form %}
+            {% if field.label != 'Категория' and field.label != 'Цепь' %}
+                {{ field.label }}
+                {{ field }}
+            {% endif %}
+        {% endfor %}
+        {{ filter_form.chain.label }}
+        <div class="row">
+            {% for key, value in filter_form.chain.field.choices %}
+            <div class="col-lg-6 col-md-6 col-sm-12 col-xs-12">
+                <li class="list-unstyled">
+                    <label class="checkbox-label-container">
+                        <input type="checkbox" value="{{ key }}" name="problems">
+                        <span>{{ value }}</span>
+                    </label>
+                </li>
+            </div>
+            {% endfor %}
+        </div>
+        
+        

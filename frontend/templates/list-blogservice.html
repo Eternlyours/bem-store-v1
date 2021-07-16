@@ -1,0 +1,13 @@
+
+{% for i in object_list %}
+<div class="card mb-3">
+    <div class="card-body">
+        <a href="{% url 'service-detail' i.slug %}">
+            <h5 class="card-title">{{ i.title }}</h5>
+        </a>
+        <p class="card-text">
+            {{ i.body|safe|truncatewords_html:"45" }}
+        </p>
+    </div>
+</div>
+{% endfor %}

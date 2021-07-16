@@ -1,0 +1,53 @@
+{% extends "item.html" %}
+
+{% block content-base %}
+
+    <div class="col-lg-9">
+
+        <div class="w-100 d-flex justify-content-between my-4 align-items-center">
+            <nav aria-label="breadcrumb">
+                {% block breadcrumbs %}
+                    <ol class="breadcrumb m-0">
+                        {% load i18n %}
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'home'%}">{% trans 'Home'%}</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="{% url 'news-list' %}">Новости</a>
+                        </li>
+                        <li class="breadcrumb-item">
+                            <a href="#" class="dsbl">{{ object.title|truncatewords:"5" }}</a>
+                        </li>
+                    </ol>
+                {% endblock %}
+            </nav>
+        </div>
+
+        <hr>
+
+        <div class="row">
+            <div class="blog d-flex flex-column">
+                {% load admin_urls %}
+                {% if user.is_superuser %}
+                    <div class="d-flex justify-content-end">
+                        <a href="{% url 'admin:blog_news_change' object.id %}" class="btn btn-primary">Редактировать</a>
+                    </div>
+                {% endif %}
+                <h1>{{ object.title }}</h1>
+
+                <div class="blog-info d-flex flex-row" >
+                    <small>Дата создания: {{ object.date }}</small>
+                
+                    <small class="ml-3 mr-3">&#10006;</small>
+                    <small>Просмотров: {{ object.views }}</small> 
+                
+                </div>
+                <div class="blog-body">
+                    {{ object.body|safe }}
+                </div>
+            </div>
+        </div>
+
+    </div>
+
+{% endblock %}

@@ -1,0 +1,172 @@
+{% extends 'base.html' %}
+
+{% block title %}
+    {{ title }}
+{% endblock %}
+
+{% block header %}
+
+{% include 'header.html' %}
+
+{% endblock %}
+
+{% block carousel %}
+
+{% include 'carousel.html' %}
+
+{% endblock %}
+
+{% block sidebar-base %}
+
+{% include 'sidebar.html' %}
+
+{% endblock %}
+
+{% block content-base %}
+<div class="col-lg-9">
+    <div class="w-100 d-flex justify-content-between my-4 align-items-center">
+        <nav aria-label="breadcrumb">
+            {% block breadcrumbs %}
+            <ol class="breadcrumb m-0">
+                {% load i18n %}
+                <li class="breadcrumb-item">
+                    <a href="{% url 'home'%}">{% trans 'Home'%}</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="" class="dsbl">О нас</a>
+                </li>
+            </ol>
+            {% endblock %}
+        </nav>
+    </div>
+
+    <hr>
+    <h1 class="ml-3">
+        О нас
+    </h1>
+    <p style="text-indent: 25px;">
+        Магазин «Бензоэлектромастер» является официальным дилером таких известных производителей электроинструмента,
+        техники и оборудования, как Stihl, Viking и Briggs-Stratton.
+
+        Запчасти магазин получает непосредственно со складов производителей.
+
+        В ассортименте нашего магазина только оригинальные и лицензированные запчасти отличного качества.
+
+        Наша компания давно завоевала доверие клиентов.
+    </p>
+    <h3>Почему вам необходимо обратиться именно к нам?</h3>
+    <div class="row">
+        <div class="card mb-3 bg-transparent border-0 wow animated animate__fadeInRight" data-wow-delay="0"
+            data-wow-duration="1.2s" data-wow-iteration="1" data-wow-offset="0">
+            <div class="row no-gutters">
+                <div class="col-md-2 d-flex justify-content-center">
+                    <img class="card-img card-img-about-us"
+                        src="https://insupam.com/wp-content/uploads/2020/02/icone-like-png.png" alt="">
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <strong>
+                                Высокое качество товаров
+                            </strong>
+                        </h5>
+                        <p class="card-text" style="text-indent: 25px;">
+                            Магазин «Бензоэлектромастер» - официальный дилер многих мировых производителей
+                            электроинструмента,
+                            техники и оборудования давно заслуживших доверие клиентов. Запчасти магазин получает
+                            непосредственно
+                            из складов представительств. В ассортименте нашего магазина только оригинальные и
+                            лицензированные
+                            запчасти отличного качества.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-3 bg-transparent border-0 wow animated animate__fadeInRight" data-wow-delay="0"
+            data-wow-duration="1.2s" data-wow-iteration="1" data-wow-offset="0">
+            <div class="row no-gutters">
+                <div class="col-md-2 d-flex justify-content-center">
+                    <img src="https://img.icons8.com/ios/452/cardboard-box.png" alt=""
+                        class="card-img card-img-about-us">
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <strong>
+                                Широкий ассортимент запчастей
+                            </strong>
+                        </h5>
+
+                        <p class="card-text" style="text-indent: 25px;">
+                            В интернет-магазине «Бензоэлектромастер» вы найдете запчасти как для распространенных
+                            моделей,
+                            так и
+                            для редких и дефицитных электроинструментов. Такой разнообразный ассортимент товара в этом
+                            магазине
+                            Челябинска дает возможность покупателям не тратить время на поиски нужной запчасти. Покупать
+                            все
+                            необходимое в одном месте очень удобно, это экономит время клиентов. Им не нужно искать
+                            товары в
+                            других магазинах.
+                        </p>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-3 bg-transparent border-0 wow animated animate__fadeInRight" data-wow-delay="0"
+            data-wow-duration="1.2s" data-wow-iteration="1" data-wow-offset="0">
+            <div class="row no-gutters">
+                <div class="col-md-2 d-flex justify-content-center">
+                    <img src="https://cdn0.iconfinder.com/data/icons/digital-marketing-2-23/48/120-512.png" alt=""
+                        class="card-img card-img-about-us">
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <strong>
+                                Расширенный поиск товаров
+                            </strong>
+                        </h5>
+                        <p class="card-text" style="text-indent: 25px;">
+                            Структура сайта интернет магазина «Бензоэлектромастер» продумана до мелочей. Удобная система
+                            поиска
+                            позволяет быстро найти нужную позицию.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="card mb-3 bg-transparent border-0 wow animated animate__fadeInRight" data-wow-delay="0"
+            data-wow-duration="1.2s" data-wow-iteration="1" data-wow-offset="0">
+            <div class="row no-gutters">
+                <div class="col-md-2 d-flex justify-content-center">
+                    <img src="https://rostjob.ru/wp-content/uploads/2015/05/plant-manager.png" alt=""
+                        class="card-img card-img-about-us">
+                </div>
+                <div class="col-md-10">
+                    <div class="card-body">
+                        <h5 class="card-title">
+                            <strong>
+                                Специалисты высокой квалификации
+                            </strong>
+                        </h5>
+                        <p class="card-text" style="text-indent: 25px;">
+                            В нашем магазине все сотрудники профессионалы в области техники и электроинструмента. Они
+                            всегда
+                            придут Вам на помощь и помогут найти нужный товар. Менеджеры-консультанты ответят на любой
+                            заинтересовавший вас вопрос.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <script type="text/javascript" charset="utf-8" async src="https://api-maps.yandex.ru/services/constructor/1.0/js/?um=constructor%3Ad9decf1b4592d6b6635e59fcf3bce68673d9907e878910d2ac9f67ae9fd89cc1&amp;width=100%25&amp;height=350&amp;lang=ru_RU&amp;scroll=true"></script>
+    {% block contact %}
+        {% include 'contact-form.html' %}
+    {% endblock %}
+</div>
+</div>
+{% endblock %}

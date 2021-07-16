@@ -1,0 +1,62 @@
+{% load cache %}
+<div class="col-lg-3 sidebar">
+    <h1 class="my-4">Поиск</h1>
+    <form action="{% url 'search' %}" method="GET">
+        <div class="input-group">
+            {{ search_form.q.errors }}
+            {{ search_form }}
+            <button type="submit" class="btn btn-primary">
+                <i class="fa fa-search"></i>
+            </button>
+        </div>
+    </form>
+    {% cache 2500 sidebar %}
+    <h1 class="my-4">Категории</h1>
+    <ul class="list-group">
+        {% load mptt_tags %}
+        {% recursetree categories %}
+        <li class="list-group-item border-bottom d-flex flex-column border-top-0 parent-category border-left-0 border-right-0 wow animated animate__backInLeft"
+            data-wow-delay="0" data-wow-offset="0" data-wow-iteration="1" data-wow-duration="1s">
+            <div class="d-flex align-items-center">
+                {% if node.icon %}
+                <object type="image/svg+xml" style="margin: auto 0; width: 40px; height: 40px;"
+                    data="{{ node.icon.url }}">
+                </object>
+                {% endif %}
+                <a href="{{ node.get_absolute_url }}" class="list-group-link ml-3">
+                    {{ node.name }}
+                </a>
+            </div>
+            {% if not node.is_leaf_node %}
+            <ul class="children-category">
+                {{ children }}
+            </ul>
+            {% endif %}
+        </li>
+        {% endrecursetree %}
+    </ul>
+    {% endcache %}
+    <h1 class="my-2">Новости</h1>
+    <div class="list-group">
+        {% for i in news %}
+        <a href="{% url 'detail-news' i.slug %}"
+            class="list-group-item list-group-item-action flex-column align-items-start mb-1">
+            <div class="d-flex w-100">
+                <h6 class="mb-1">
+                    <strong>
+                        {{ i.title|truncatewords:"6" }}
+                    </strong>
+                </h6>
+                <!-- <small>3&nbsp;дня&nbsp;назад</small> -->
+            </div>
+            <hr>
+            <div class="mb-1" style="font-size: 15px;">
+                {{ i.body|safe|truncatewords_html:"7" }}
+            </div>
+            <small>{{ i.date|date:"F j, Y" }}</small>
+        </a>
+        {% endfor %}
+
+    </div>
+
+</div>
